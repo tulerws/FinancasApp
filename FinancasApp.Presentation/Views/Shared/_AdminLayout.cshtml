@@ -1,0 +1,127 @@
+﻿@using FinancasApp.Presentation.Models.Auth;
+@using Newtonsoft.Json;
+
+@{
+    //ler os dados do usuário autenticado
+    var data = User.Identity.Name;
+
+    //deserializar o JSON
+    var usuario = JsonConvert.DeserializeObject<UserAuthViewModel>(data);
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- folha de estilos CSS do bootstrap -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+
+    <title>FinancasApp</title>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/Home/Index">
+                <strong>Aplicativo de Finanças</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/Home/Index">
+                            Página inicial
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Movimentacoes/Cadastro">
+                            Cadastrar Movimentações
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Movimentacoes/Consulta">
+                            Consultar Movimentações
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#"
+                           data-bs-toggle="modal" data-bs-target="#dadosUsuario">
+                            @usuario.Nome
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Account/Logout">
+                            Sair do Sistema
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    @if (TempData["MensagemSucesso"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>@TempData["MensagemSucesso"]</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    else if (TempData["MensagemAlerta"] != null)
+    {
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>@TempData["MensagemAlerta"]</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    else if (TempData["MensagemErro"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>@TempData["MensagemErro"]</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="container mt-3">
+        @RenderBody()
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="dadosUsuario" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Dados do Usuário</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-sm table-borderless">
+                        <tr>
+                            <td>ID do usuário:</td>
+                            <td>@usuario.Id</td>
+                        </tr>
+                        <tr>
+                            <td>Nome:</td>
+                            <td>@usuario.Nome</td>
+                        </tr>
+                        <tr>
+                            <td>Email:</td>
+                            <td>@usuario.Email</td>
+                        </tr>
+                        <tr>
+                            <td>Data/Hora de acesso:</td>
+                            <td>@usuario.DataHoraAcesso?.ToString("dd/MM/yy HH:mm")</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- biblioteca JS do bootstrap -->
+    <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

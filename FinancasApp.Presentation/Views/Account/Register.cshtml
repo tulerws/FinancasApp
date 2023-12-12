@@ -1,0 +1,68 @@
+﻿@* definindo a classe de modelo de dados desta página *@
+@model FinancasApp.Presentation.Models.Account.RegisterViewModel
+
+@{
+    //definindo a página de layout
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+}
+
+<div class="text-center">
+    <h3>Aplicativo de Finanças</h3>
+    <p>Crie sua conta de usuário</p>
+</div>
+
+@using (Html.BeginForm())
+{
+    <div class="mt-2">
+        <label>Nome do usuário:</label>
+        @Html.TextBoxFor(model => model.Nome, new {
+    @placeholder="", @class="form-control"
+    })
+        <span class="text-danger">
+            @Html.ValidationMessageFor(model => model.Nome)
+        </span>
+    </div>
+
+    <div class="mt-2">
+        <label>Email de acesso:</label>
+        @Html.TextBoxFor(model => model.Email, new {
+    @placeholder="Digite seu email aqui.", @class="form-control"
+    })
+        <span class="text-danger">
+            @Html.ValidationMessageFor(model => model.Email)
+        </span>
+    </div>
+
+    <div class="mt-2">
+        <label>Senha de acesso:</label>
+        <label>Requisitos: 1 Letra maiúscula, 1 minúscula, 1 número e um caractere especial</label>
+        @Html.PasswordFor(model => model.Senha, new {
+    @placeholder="Digite sua senha aqui.", @class="form-control"
+    })
+        <span class="text-danger">
+            @Html.ValidationMessageFor(model => model.Senha)
+        </span>
+    </div>
+
+    <div class="mt-2">
+        <label>Confirme a senha:</label>
+        @Html.PasswordFor(model => model.SenhaConfirmacao, new {
+    @placeholder="Confirme sua senha aqui.", @class="form-control"
+    })
+        <span class="text-danger">
+            @Html.ValidationMessageFor(model => model.SenhaConfirmacao)
+        </span>
+    </div>
+
+    <div class="mt-2 d-grid">
+        <input type="submit" value="Realizar Cadastro" class="btn btn-primary" />
+    </div>
+
+    <div class="mt-2 d-grid">
+        <a href="/Account/Login" class="btn btn-light">
+            Já possui conta? <strong>Acesse aqui!</strong>
+        </a>
+    </div>
+
+}
+

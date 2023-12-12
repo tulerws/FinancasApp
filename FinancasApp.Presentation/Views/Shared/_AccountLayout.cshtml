@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- folha de estilos CSS do bootstrap -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+
+    <title>FinancasApp</title>
+</head>
+<body class="bg-secondary">
+
+    @if (TempData["MensagemSucesso"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>@TempData["MensagemSucesso"]</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+    }
+    else if (TempData["MensagemAlerta"] != null)
+    {
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>@TempData["MensagemAlerta"]</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+    }
+    else if (TempData["MensagemErro"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>@TempData["MensagemErro"]</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 offset-md-4">
+                <div class="card mt-5">
+                    <div class="card-body">
+                        <!-- conteúdo principal do layout -->
+                        @RenderBody()
+                    </div>
+                </div>
+                <div class="mt-3 text-white text-center">
+                    <div>
+                        <strong>Sistema de controle de finanças v1.0</strong>
+                    </div>
+                    <div>
+                        <small>Turma C# WebDeveloper 2023 - COTI Informática</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- biblioteca JS do bootstrap -->
+    <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

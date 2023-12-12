@@ -1,0 +1,46 @@
+﻿@* definindo a classe de modelo desta página (ViewModel) *@
+@model FinancasApp.Presentation.Models.Account.LoginViewModel
+
+@{
+    //definindo a página de layout
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+}
+
+<div class="text-center">
+    <h3>Aplicativo de Finanças</h3>
+    <p>Acesso ao Sistema</p>
+</div>
+
+@using (Html.BeginForm())
+{
+    <div class="mt-2">
+        <label>Email de acesso:</label>
+        @Html.TextBoxFor(model => model.Email, new {
+    @placeholder="Digite seu email aqui.", @class="form-control"
+    })
+        <span class="text-danger">
+            @Html.ValidationMessageFor(model => model.Email)
+        </span>
+    </div>
+
+    <div class="mt-2">
+        <label>Senha de acesso:</label>
+        @Html.PasswordFor(model => model.Senha, new {
+    @placeholder="Digite sua senha aqui.", @class="form-control"
+    })
+        <span class="text-danger">
+            @Html.ValidationMessageFor(model => model.Senha)
+        </span>
+    </div>
+
+    <div class="mt-2 d-grid">
+        <input type="submit" value="Entrar" class="btn btn-primary" />
+    </div>
+
+    <div class="mt-2 d-grid">
+        <a href="/Account/Register" class="btn btn-light">
+            Não possui conta? <strong>Cadastre-se aqui!</strong>
+        </a>
+    </div>
+}
+

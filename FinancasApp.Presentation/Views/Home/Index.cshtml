@@ -1,0 +1,158 @@
+﻿@using System.Globalization;
+@model FinancasApp.Presentation.Models.Home.PainelPrincipalViewModel
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var cultureInfo = new CultureInfo("en-US");
+}
+
+<h4>Seja bem vindo ao sistema de controle de finanças.</h4>
+<p>
+    Resumo financeiro do período de
+    <strong>@Model.DataInicio?.ToString("dd/MM/yyyy")</strong>
+    até <strong>@Model.DataFim?.ToString("dd/MM/yyyy")</strong>
+</p>
+
+<div class="row">
+    <div class="col">
+        <div class="card m-1">
+            <div class="card-body bg-success text-white text-end">
+                <h6>Total de receitas</h6>
+                <h3>@Model.TotalReceitas?.ToString("c")</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card m-1">
+            <div class="card-body bg-danger text-white text-end">
+                <h6>Total de despesas</h6>
+                <h3>@Model.TotalDespesas?.ToString("c")</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card m-1">
+            <div class="card-body bg-secondary text-white text-end">
+                <h6>Saldo</h6>
+                <h3>@Model.Saldo?.ToString("c")</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card m-1">
+            <div class="card-body bg-info text-white text-end">
+                <h6>Situação</h6>
+                <h3>@Model.Situacao</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3 mb-5">
+    <div class="col">
+        <div id="donutChartContainer"></div>
+    </div>
+    <div class="col">
+        <div id="columnChartContainer"></div>
+    </div>
+</div>
+
+@section scripts {
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+
+    <script>
+        // Dados para o gráfico de donut
+        var donutData = [{
+            name: 'Contas a Receber',
+            y: @Model.TotalReceitas?.ToString("N2", cultureInfo).Replace(",","")
+                }, {
+            name: 'Contas a Pagar',
+            y: @Model.TotalDespesas?.ToString("N2", cultureInfo).Replace(",","")
+                }];
+
+        // Configurações do gráfico de donut
+        var donutChartOptions = {
+            chart: {
+                type: 'pie',
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
+            },
+            title: {
+                text: 'Contas a Receber e Contas a Pagar'
+            },
+            plotOptions: {
+                pie: {
+                    innerSize: '50%',
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                    }
+                }
+            },
+            series: [{
+                name: 'Porcentagem',
+                colorByPoint: true,
+                data: donutData
+            }]
+        };
+
+        // Criação do gráfico de donut
+        Highcharts.chart('donutChartContainer', donutChartOptions);
+
+    </script>
+
+    <script>
+        var categories = []; //array
+        var data = []; //array
+    </script>
+
+    @foreach (var item in Model.GraficoCategorias)
+    {
+        <script>
+            categories.push('@item.Nome');
+            data.push(@item.Valor?.ToString("N2", cultureInfo).Replace(",",""))
+        </script>
+    }
+
+    <script>
+        // Dados para o gráfico de colunas
+        var columnData = {
+            categories: categories,
+            series: [{
+                name: 'Contas',
+                data: data
+            }]
+        };
+
+        // Configurações do gráfico de colunas
+        var columnChartOptions = {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Total de Contas por Categorias'
+            },
+            xAxis: {
+                categories: columnData.categories
+            },
+            yAxis: {
+                title: {
+                    text: 'Quantidade de Contas'
+                }
+            },
+            series: columnData.series
+        };
+
+        // Criação do gráfico de colunas
+        Highcharts.chart('columnChartContainer', columnChartOptions);
+
+    </script>
+}
+
+
+
+

@@ -1,0 +1,91 @@
+﻿@model FinancasApp.Presentation.Models.Movimentacoes.MovimentacoesConsultaViewModel
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h4>Consulta de movimentações</h4>
+<p>Consulte suas contas a pagar e receber.</p>
+
+@using (Html.BeginForm())
+{
+    <div class="row mt-2">
+        <div class="col">
+            <label>Data de início:</label>
+            @Html.TextBoxFor(model => model.DataMin, "{0:yyyy-MM-dd}",
+        new { @class = "form-control", @type = "date" })
+            <span class="text-danger">
+                @Html.ValidationMessageFor(model => model.DataMin)
+            </span>
+        </div>
+        <div class="col">
+            <label>Data de fim:</label>
+            @Html.TextBoxFor(model => model.DataMax, "{0:yyyy-MM-dd}",
+        new { @class = "form-control", @type = "date" })
+            <span class="text-danger">
+                @Html.ValidationMessageFor(model => model.DataMax)
+            </span>
+        </div>
+        <div class="col">
+            <input type="submit" class="btn btn-success mt-4"
+                   value="Pesquisar Movimentações" />
+        </div>
+    </div>
+}
+
+@if (Model != null && Model.ListagemMovimentacoes != null)
+{
+    if (Model.ListagemMovimentacoes.Count > 0)
+    {
+        <div class="table-responsive mt-3">
+            <table class="table table-sm table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Valor</th>
+                        <th>Tipo</th>
+                        <th>Nome</th>
+                        <th>Categoria</th>
+                        <th>Operações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.ListagemMovimentacoes)
+                    {
+                        <tr>
+                            <td>@item.Data?.ToString("dd/MM/yyyy")</td>
+                            <td>@item.Valor?.ToString("c")</td>
+                            <td>@item.Tipo.ToString()</td>
+                            <td>@item.Nome</td>
+                            <td>@item.Categoria?.Nome</td>
+                            <td>
+                                <a href="/Movimentacoes/Edicao/@item.Id.Value"
+                                   class="btn btn-sm btn-primary">
+                                    Editar
+                                </a>
+                                <a href="/Movimentacoes/Exclusao/@item.Id.Value"
+                                   onclick="return confirm('Deseja excluir este item?');"
+                                   class="btn btn-sm btn-danger">
+                                    Excluir
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="6">
+                            Quantidade de movimentações: @Model.ListagemMovimentacoes.Count
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="mt-3">
+            Nenhum resultado foi obtido.
+        </div>
+    }
+}
